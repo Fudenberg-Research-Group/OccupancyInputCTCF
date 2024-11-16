@@ -28,8 +28,6 @@ First,
 git clone https://github.com/Fudenberg-Research-Group/OccupancyInputCTCF.git
 ```
 
-```
-
 ### Workflow
 #### Running simulations 
 1. One-Dimensional Lattice Simulation: with running `workflow.py`
