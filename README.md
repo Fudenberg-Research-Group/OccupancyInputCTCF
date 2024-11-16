@@ -27,9 +27,7 @@ First,
 ```
 git clone https://github.com/Fudenberg-Research-Group/OccupancyInputCTCF.git
 ```
-after navigating to the folder:
-```
-pip install -e .
+
 ```
 
 ### Workflow
