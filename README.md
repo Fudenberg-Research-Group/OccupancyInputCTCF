@@ -25,7 +25,7 @@ The structure of this repository follows as below:
 First, 
 
 ```
-git clone https://github.com/Fudenberg-Research-Group/dynamic_extrusion_boundaries.git
+git clone https://github.com/Fudenberg-Research-Group/OccupancyInputCTCF.git
 ```
 after navigating to the folder:
 ```
