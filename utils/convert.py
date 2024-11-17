@@ -99,8 +99,7 @@ def get_lattice_size(region, lattice_site=250):
     Returns:
     - int: Number of lattice sites within the region.
     """
-    region_start = bioframe.parse_region_string(region)[1]
-    region_end = bioframe.parse_region_string(region)[2]
+    _, region_start, region_end = bioframe.parse_region_string(region)
     lattice_size = (region_end - region_start) // lattice_site
     return lattice_size
 
