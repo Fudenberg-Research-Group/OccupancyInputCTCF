@@ -81,7 +81,7 @@ def fetch_seq_from_genome(bedfile, ref_genome_filepath='/project/fudenber_735/ge
     ref_genome = pysam.FastaFile(ref_genome_filepath)
 
 
-    ctcf_pfm = np.loadtxt('data/MA0139.1.pfm', skiprows=1)
+    ctcf_pfm = np.loadtxt('MA0139.1.pfm', skiprows=1)
     ctcf_pwm = pfm_to_pwm(ctcf_pfm)
 
     ctcf_pfm_rc = np.flip(ctcf_pfm, axis=[0])
