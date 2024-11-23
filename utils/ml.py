@@ -5,11 +5,11 @@ from cnn_model import FlankCoreModel as CtcfOccupPredictor
 import torch
 import torch.nn.functional as F
 torch.manual_seed(2024)
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'cpu' # prediction is fast, so GPU is not necessary
 
-def pfm_to_pwm(pfm, bg_freq=0.25):
+def pfm_to_pwm(pfm, background_frequency=0.25):
         s = pfm.sum(axis=0)
-        pwm = np.log((pfm/s) / bg_freq)
+        pwm = np.log((pfm/s) / background_frequency)
         return pwm
 
 def dna_1hot(seq, seq_len=None, n_uniform=False, n_sample=False):
@@ -67,21 +67,22 @@ def scan_sequence(pwm, pwm_rc, seq):
         for i in range(seq.shape[1] - k + 1)
     ])
     
-    ctcf_argmax = scores.argmax()
+    motif_position = scores.argmax()
 
-    ctcf_rc_argmax = scores_rc.argmax()
+    rc_motif_position = scores_rc.argmax()
 
-    if scores[ctcf_argmax] > scores_rc[ctcf_rc_argmax]:
-        return "+", ctcf_argmax
+    if scores[motif_position] > scores_rc[rc_motif_position]:
+        return "+", motif_position
     else:
-        return "-", ctcf_rc_argmax
+        return "-", rc_motif_position
 
-def fetch_seq_from_genome(bedfile, ref_genome_filepath='/project/fudenber_735/genomes/mm10/mm10.fa'):
+def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_735/genomes/mm10/mm10.fa',
+                          flanking_bp=15, core_bp=18):
     peaks_table = pd.read_table(bedfile, sep=',').iloc[:,:3]
     ref_genome = pysam.FastaFile(ref_genome_filepath)
 
 
-    ctcf_pfm = np.loadtxt('MA0139.1.pfm', skiprows=1)
+    ctcf_pfm = np.loadtxt('../data/MA0139.1.pfm', skiprows=1)
     ctcf_pwm = pfm_to_pwm(ctcf_pfm)
 
     ctcf_pfm_rc = np.flip(ctcf_pfm, axis=[0])
@@ -94,7 +95,7 @@ def fetch_seq_from_genome(bedfile, ref_genome_filepath='/project/fudenber_735/ge
         seq = dna_1hot(ref_genome.fetch(chrom, int(start), int(end)))
         seq = seq.T
         direction, ctcf_start = scan_sequence(ctcf_pwm, ctcf_pwm_rc, seq)
-        seq = dna_1hot(ref_genome.fetch(chrom, int(start + ctcf_start - 15), int(start + ctcf_start + 33)))
+        seq = dna_1hot(ref_genome.fetch(chrom, int(start + ctcf_start - flanking_bp), int(start + ctcf_start + flanking_bp + core_bp)))
         seq = seq.T
 
         if direction == "-":
@@ -106,20 +107,25 @@ def fetch_seq_from_genome(bedfile, ref_genome_filepath='/project/fudenber_735/ge
 
     return seqs
 
-def predict_ctcf_occupancy(ctcf_bed, model_weights_path='./model_weights'):
-    seqs = fetch_seq_from_genome(ctcf_bed)
+def predict_ctcf_occupancy(ctcf_bed, model_weights_path='../data/model_weights'):
+    seqs = fetch_and_orient_from_fasta(ctcf_bed)
     seqs = torch.tensor(seqs, dtype=torch.float32).to(device)
     peaks_table = pd.read_table(ctcf_bed, sep=',')
 
-    best_model = CtcfOccupPredictor(seq_len=48,n_head=11, kernel_size=3).to(device)
-    best_model.load_state_dict(torch.load(model_weights_path, weights_only=True))
+    weights = torch.load(model_weights_path, weights_only=True)
+    state_dict = weights['state_dict']
+    input_layer_name = list(state_dict.keys())[0]  # Get the first key
+    seq_len = state_dict[input_layer_name].shape[-1]
+
+    best_model = CtcfOccupPredictor(seq_len=seq_len,n_head=11, kernel_size=3).to(device)
+    best_model.load_state_dict(weights)
 
     best_model.eval()
     with torch.no_grad():
         preds = best_model(seqs)
         preds = F.softmax(preds)
 
-    peaks_table['predicted_occupancy'] = preds.cpu().numpy()[:,1]
+    peaks_table['predicted_occupancy'] = preds.numpy()[:,1]
     peaks_table.to_csv(f'with_predicted_occupancy_{ctcf_bed}', sep=',', index=False)
     
     return
