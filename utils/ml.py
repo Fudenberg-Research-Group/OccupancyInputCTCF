@@ -1,7 +1,7 @@
 import pandas as pd
 import pysam
 import numpy as np
-from cnn_model import FlankCoreModel as CtcfOccupPredictor
+from .cnn_model import FlankCoreModel as CtcfOccupPredictor
 import torch
 import torch.nn.functional as F
 torch.manual_seed(2024)
