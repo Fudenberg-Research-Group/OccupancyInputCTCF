@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 
 # Add custom library path
 sys.path.append('/home1/rahmanin/start/polychrom/projects/Site_wise_occupancy/OccupancyInputCTCF/')
@@ -19,20 +20,8 @@ ctcf_peaks = ('/project/fudenber_735/collaborations/karissa_2022/2022_09_feature
               '/CTCF_peaks_called_on_4reps_foundInatLeast2reps_noBlacklist.bed')
 
 # Simulation parameters
-paramdict = {
-    'CTCF_facestall': [1.0],
-    'CTCF_backstall': [0.0],
-    'CTCF_lifetime': [300],
-    'CTCF_offtime': [180],
-    'LEF_lifetime': [660],
-    'LEF_stalled_lifetime': [660],
-    'LEF_birth': [0.1],
-    'LEF_pause': [0.9],
-    'LEF_separation': 75,
-    'sites_per_monomer': 10,
-    'number_of_replica': 10,
-    'velocity_multiplier': 1
-}
+with open('files/paramdict.json', 'r') as json_file:
+    paramdict = json.load(json_file)
 
 # Flags for simulation
 run_md_sim = True  # Flag for MD simulation
