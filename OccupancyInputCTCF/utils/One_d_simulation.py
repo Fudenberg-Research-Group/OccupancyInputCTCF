@@ -7,7 +7,7 @@ import sys
 
 from .lattice_translocators import LEFTranslocator, LEFTranslocatorDynamicBoundary
 sys.path.append('/home1/rahmanin/start/polychrom/projects/Site_wise_occupancy/OccupancyInputCTCF/')
-import .simfuncs as rfuncs
+from . import simfuncs as rfuncs
 
 def Perform_1d_simulation(paramdict, ctcf_params, trajectory_length, output_directory):
     """
