@@ -5,7 +5,7 @@ import h5py
 import time
 import sys
 
-from ./lattice_translocators import LEFTranslocator, LEFTranslocatorDynamicBoundary
+from .lattice_translocators import LEFTranslocator, LEFTranslocatorDynamicBoundary
 sys.path.append('/home1/rahmanin/start/polychrom/projects/Site_wise_occupancy/OccupancyInputCTCF/')
 import utils.simfuncs as rfuncs
 
