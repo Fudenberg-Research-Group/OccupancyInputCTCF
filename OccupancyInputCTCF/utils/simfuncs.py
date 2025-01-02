@@ -1,4 +1,4 @@
-from lattice_translocators import LEFTranslocator, LEFTranslocatorDynamicBoundary
+from .lattice_translocators import LEFTranslocator, LEFTranslocatorDynamicBoundary
 import numpy as np
 
 def make_site_array(site_types, 
