@@ -113,7 +113,8 @@ def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
     peaks_table = pd.read_table(ctcf_bed, sep=',')
 
     weights = torch.load(model_weights_path, weights_only=True)
-    state_dict = weights['state_dict']
+    #weights = torch.load(model_weights_path, map_location=torch.device('cpu'))
+    state_dict = weights#['state_dict']
     input_layer_name = list(state_dict.keys())[0]  # Get the first key
     seq_len = state_dict[input_layer_name].shape[-1]
 
