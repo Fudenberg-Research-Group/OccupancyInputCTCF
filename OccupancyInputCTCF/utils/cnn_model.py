@@ -8,7 +8,7 @@ class FlankCoreModel(nn.Module):
 
         d_embed1 = 5
         d_embed2 = 5
-        maxpool_size = 5
+        maxpool_size = 3
         d_embed3 = 11
 
         # capture core
