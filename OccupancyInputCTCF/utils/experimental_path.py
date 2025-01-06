@@ -8,7 +8,7 @@ ctcf_path='/project/fudenber_735/collaborations/karissa_2022/2022_09_features_fo
 ### importing ctcf motifs ###
 motif_directory='/project/fudenber_735/motifs/mm10/jaspar/MA0139.1.tsv.gz'
 ### importing RAD21 
-RAD21='/RAD21_peaks_called_on_6reps_foundInatLeast3reps_noBlacklist.bed'#.query(f'chrom in {clr.chromnames}')
+RAD21_path=ctcf_path+'/RAD21_peaks_called_on_6reps_foundInatLeast3reps_noBlacklist.bed'#.query(f'chrom in {clr.chromnames}')
 ctcf_motifs = '/project/fudenber_735/motifs/mm10/jaspar/MA0139.1.tsv.gz'
 ctcf_peaks = ('/project/fudenber_735/collaborations/karissa_2022/2022_09_features_for_RNAseq/ChIP-seq_in_WT-parental-E14' +
               '/CTCF_peaks_called_on_4reps_foundInatLeast2reps_noBlacklist.bed')
