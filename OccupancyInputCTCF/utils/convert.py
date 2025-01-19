@@ -112,7 +112,7 @@ def get_ctcf_list(target_dataframe, parameters):
 
     Parameters:
     - target_dataframe (DataFrame): DataFrame with occupancy and lattice locations.
-        chrom  | start  | end    | mid     | strand | lattice_loc | occupancy
+        chrom  | start  | end    | mid     | strand | lattice_loc | predicted_occupancy
         -------|--------|--------|---------|--------|-------------|-----------
         chr1   | 340000 | 341000 | 340500  | +      | 136000      | 0.85
     - parameters (dict): Dictionary of simulation parameters. Example:
@@ -134,7 +134,7 @@ def get_ctcf_list(target_dataframe, parameters):
     ctcf_loc_list = list(np.sort(ctcfrightlist + ctcfleftlist))
     CTCF_right_positions = np.array(ctcfrightlist)
     CTCF_left_positions = np.array(ctcfleftlist)
-    ctcf_occup_list = list(target_dataframe['occupancy'])
+    ctcf_occup_list = list(target_dataframe['predicted_occupancy'])
     CTCF_offtime_val = parameters['CTCF_offtime'][0]
     ctcf_occup_array = np.array(ctcf_occup_list)
     ctcf_lifetime_list = CTCF_offtime_val * ctcf_occup_array / (1 - ctcf_occup_array)
