@@ -8,7 +8,7 @@ class FlankCoreModel(nn.Module):
 
         d_embed1 = 5
         d_embed2 = 5
-        maxpool_size = 3
+        maxpool_size = 5
         d_embed3 = 11
 
         # capture core
@@ -41,7 +41,7 @@ class FlankCoreModel(nn.Module):
     def _calculate_num_out_features(self, n_feature, seq_len):
         with torch.no_grad():  
             x = torch.zeros(1, n_feature, seq_len)
-
+            
             out_1 = self.convblock1(x)
             out_2 = self.convblock2(x)
             out = torch.cat([out_1, out_2], dim=1)

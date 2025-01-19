@@ -4,34 +4,6 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.regularizers import l2
 
 
-def model_linear_reg(features, learningrate):
-    model = Sequential()
-    model.add(Input(shape=(features.shape[1], features.shape[2])))
-    model.add(Flatten())
-    model.add(Dense(1))
-    model.compile(optimizer= Adam(learning_rate = learningrate), loss = 'mean_squared_error')
-    return model
-
-def model_logistic_reg(features, learningrate):
-    model = Sequential()
-    model.add(Input(shape=(features.shape[1], features.shape[2])))
-    model.add(Flatten())
-    model.add(Dense(1, activation='sigmoid')) 
-    model.compile(optimizer= Adam(learning_rate = learningrate), loss = 'mean_squared_error')
-    return model
-
-def model_logistic_regression(features, learningrate, regularization_strength=0.01):
-    model = Sequential()
-    model.add(Input(shape=(features.shape[1], features.shape[2])))
-    model.add(Flatten())
-    model.add(Dense(1, activation='sigmoid', kernel_regularizer=l2(regularization_strength))) 
-    model.compile(optimizer=Adam(learning_rate=learningrate), loss='mean_squared_error')
-    return model
-
-
-
-
-
 def Regressionmodel(features, learningrate, dense_layers = 1, activation=None, regularization_strength=0.01):
     model = Sequential()
     model.add(Input(shape=(features.shape[1], features.shape[2])))

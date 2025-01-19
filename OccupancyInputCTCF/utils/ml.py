@@ -1,7 +1,7 @@
 import pandas as pd
 import pysam
 import numpy as np
-from .cnn_model import FlankCoreModel as CtcfOccupPredictor
+from cnn_model import FlankCoreModel as CtcfOccupPredictor
 import torch
 import torch.nn.functional as F
 torch.manual_seed(2024)
@@ -82,7 +82,7 @@ def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_
     ref_genome = pysam.FastaFile(ref_genome_filepath)
 
 
-    ctcf_pfm = np.loadtxt('data/MA0139.1.pfm', skiprows=1)
+    ctcf_pfm = np.loadtxt('../data/MA0139.1.pfm', skiprows=1)
     ctcf_pwm = pfm_to_pwm(ctcf_pfm)
 
     ctcf_pfm_rc = np.flip(ctcf_pfm, axis=[0])
@@ -104,20 +104,16 @@ def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_
         seqs.append(seq)
 
     seqs = np.array(seqs)
+    seq_len = 2*flanking_bp + core_bp
 
-    return seqs
+    return seqs, seq_len
 
-def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
-    seqs = fetch_and_orient_from_fasta(ctcf_bed)
+def predict_ctcf_occupancy(ctcf_bed, model_weights_path='../data/model_weights'):
+    seqs, seq_len = fetch_and_orient_from_fasta(ctcf_bed)
     seqs = torch.tensor(seqs, dtype=torch.float32).to(device)
     peaks_table = pd.read_table(ctcf_bed, sep=',')
 
-    #weights = torch.load(model_weights_path, weights_only=True)
-    weights = torch.load(model_weights_path, map_location=torch.device('cpu'))
-    state_dict = weights#['state_dict']
-    input_layer_name = list(state_dict.keys())[0]  # Get the first key
-    seq_len = state_dict[input_layer_name].shape[-1]
-
+    weights = torch.load(model_weights_path, weights_only=True)
     best_model = CtcfOccupPredictor(seq_len=seq_len,n_head=11, kernel_size=3).to(device)
     best_model.load_state_dict(weights)
 
@@ -127,7 +123,6 @@ def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
         preds = F.softmax(preds)
 
     peaks_table['predicted_occupancy'] = preds.numpy()[:,1]
-    peaks_table.to_csv(f'with_predicted_occupancy_{ctcf_bed}', sep=',', index=False)
+    peaks_table.to_csv(f'{ctcf_bed}_with_predicted_occupancy', sep=',', index=False)
     
     return
-
