@@ -77,13 +77,13 @@ def get_refined_occupancy(region_dataframe, region, lattice_size=250):
     """
     region_start = bioframe.parse_region_string(region)[1]
     region_dataframe['lattice_loc'] = ((region_dataframe['mid'] - region_start) // lattice_size).astype('int')
-    result_c = region_dataframe.groupby(['lattice_loc', 'strand'])['occupancy'].apply(
+    result_c = region_dataframe.groupby(['lattice_loc', 'strand'])['predicted_occupancy'].apply(
         lambda x: 1 - ((1 - x).prod())
     ).reset_index()
     result = result_c.merge(region_dataframe.drop_duplicates(['lattice_loc', 'strand']),
                             on=['lattice_loc', 'strand'], how='left')
     result = result.rename(columns={'occupancy_x': 'occupancy'})
-    result = result[['chrom', 'start', 'end', 'mid', 'strand', 'lattice_loc', 'occupancy']]
+    result = result[['chrom', 'start', 'end', 'mid', 'strand', 'lattice_loc', 'predicted_occupancy']]
     return result
 
 
