@@ -113,7 +113,7 @@ def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
     seqs = torch.tensor(seqs, dtype=torch.float32).to(device)
     peaks_table = pd.read_table(ctcf_bed, sep=',')
 
-    weights = torch.load(model_weights_path, weights_only=True)
+    weights = torch.load(model_weights_path, weights_only=True, map_location=torch.device(device))
     best_model = CtcfOccupPredictor(seq_len=seq_len,n_head=11, kernel_size=3).to(device)
     best_model.load_state_dict(weights)
 
