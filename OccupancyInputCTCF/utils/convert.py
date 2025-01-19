@@ -82,7 +82,7 @@ def get_refined_occupancy(region_dataframe, region, lattice_size=250):
     ).reset_index()
     result = result_c.merge(region_dataframe.drop_duplicates(['lattice_loc', 'strand']),
                             on=['lattice_loc', 'strand'], how='left')
-    result = result.rename(columns={'occupancy_x': 'occupancy'})
+    result = result.rename(columns={'predicted_occupancy_x': 'predicted_occupancy'})
     result = result[['chrom', 'start', 'end', 'mid', 'strand', 'lattice_loc', 'predicted_occupancy']]
     return result
 
