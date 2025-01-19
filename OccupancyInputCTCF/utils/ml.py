@@ -82,7 +82,7 @@ def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_
     ref_genome = pysam.FastaFile(ref_genome_filepath)
 
 
-    ctcf_pfm = np.loadtxt('../../data/MA0139.1.pfm', skiprows=1)
+    ctcf_pfm = np.loadtxt('data/MA0139.1.pfm', skiprows=1)
     ctcf_pwm = pfm_to_pwm(ctcf_pfm)
 
     ctcf_pfm_rc = np.flip(ctcf_pfm, axis=[0])
@@ -108,7 +108,7 @@ def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_
 
     return seqs, seq_len
 
-def predict_ctcf_occupancy(ctcf_bed, model_weights_path='../../data/model_weights'):
+def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
     seqs, seq_len = fetch_and_orient_from_fasta(ctcf_bed)
     seqs = torch.tensor(seqs, dtype=torch.float32).to(device)
     peaks_table = pd.read_table(ctcf_bed, sep=',')
