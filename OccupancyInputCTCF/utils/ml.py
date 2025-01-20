@@ -125,4 +125,4 @@ def predict_ctcf_occupancy(ctcf_bed, model_weights_path='data/model_weights'):
     peaks_table['predicted_occupancy'] = preds.numpy()[:,1]
     peaks_table.to_csv(f'{ctcf_bed}_with_predicted_occupancy', sep=',', index=False)
     
-    return
+    return peaks_table
