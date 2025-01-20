@@ -22,7 +22,7 @@ RAD21['mid']=(RAD21.end+RAD21.start)/2
 bw_rad21 = pyBigWig.open(exp.bw_path_rad21)
 bw_ctcf = pyBigWig.open(exp.bw_path_ctcf)
 
-def plot_chip_hic(region, chip, binned_matrix, output_file='plots.png'):
+def plot_chip_hic(region, chip, binned_matrix, lattice_size = 0.25, output_file='plots.png'):
     """
     Hi-C and ChIP-seq plots along with simulated data visualizations.
     
