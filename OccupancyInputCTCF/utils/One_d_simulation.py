@@ -130,4 +130,4 @@ def Perform_1d_simulation(paramdict, ctcf_params, trajectory_length, output_dire
         # Add attributes to HDF5 file for metadata
         myfile.attrs["N"] = N * paramdict['sites_per_monomer']
         myfile.attrs["LEFNum"] = LEFNum
-    myfile.close()
+
