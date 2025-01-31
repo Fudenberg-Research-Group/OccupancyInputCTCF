@@ -64,4 +64,28 @@ def chip_seq_from_lef(lef_positions, site_number_per_replica, min_time=0):
     hist,hist_ary = np.histogram(  np.mod( lef_positions_aray , site_number_per_replica ), np.arange(0,site_number_per_replica,1))
     return hist
 
+def peak_positions(boundary_list, window_sizes=[1]):
+    """
+    Calculate peak positions based on a boundary_list within window_sizes.
+
+    Args:
+        boundary_list (list): List of boundary values.
+        window_sizes (list, optional): List of window sizes. Defaults to [1].
+
+    Returns:
+        np.ndarray: Array containing peak positions.
+    """
+    peak_monomers = np.array([])
+
+    for i in window_sizes:
+        inds_to_add = [boundary + i for boundary in boundary_list]
+        peak_monomers = np.hstack((peak_monomers, inds_to_add))
+
+    return peak_monomers.astype(int)
+
+def FRiP(num_sites_t, lef_positions, peak_positions ):
+    
+    hist,edges = np.histogram(  lef_positions  , np.arange(num_sites_t+1) )
+    return np.sum(hist[peak_positions] )/len(lef_positions)
+
 
