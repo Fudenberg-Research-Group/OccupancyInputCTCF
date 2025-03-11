@@ -106,7 +106,7 @@ def get_lattice_size(region, lattice_site=250):
 
 
 # Function: Generate CTCF lists for simulation
-def get_ctcf_list(target_dataframe, parameters):
+def get_ctcf_list(target_dataframe, parameters, insert_on='bound_time'):
     """
     Extract CTCF positions and related parameters for simulations.
 
@@ -135,9 +135,14 @@ def get_ctcf_list(target_dataframe, parameters):
     CTCF_right_positions = np.array(ctcfrightlist)
     CTCF_left_positions = np.array(ctcfleftlist)
     ctcf_occup_list = list(target_dataframe['predicted_occupancy'])
-    CTCF_offtime_val = parameters['CTCF_offtime'][0]
     ctcf_occup_array = np.array(ctcf_occup_list)
-    ctcf_lifetime_list = CTCF_offtime_val * ctcf_occup_array / (1 - ctcf_occup_array)
-    ctcf_offtime_list = np.ones(len(ctcf_loc_list)) * CTCF_offtime_val
-
+    if insert_on=='bound_time':
+        CTCF_offtime_val = parameters['CTCF_offtime'][0]
+        ctcf_lifetime_list = CTCF_offtime_val * ctcf_occup_array / (1 - ctcf_occup_array)
+        ctcf_offtime_list = np.ones(len(ctcf_loc_list)) * CTCF_offtime_val
+    else:
+        CTCF_lifetime_val = parameters['CTCF_lifetime'][0]
+        ctcf_lifetime_list = np.ones(len(ctcf_loc_list)) * CTCF_lifetime_val
+        ctcf_offtime_list = CTCF_lifetime_val * (1-ctcf_occup_array)/ctcf_occup_array
+        
     return CTCF_left_positions, CTCF_right_positions, ctcf_loc_list, ctcf_lifetime_list, ctcf_offtime_list
