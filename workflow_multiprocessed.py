@@ -20,7 +20,7 @@ import OccupancyInputCTCF.utils.experimental_path as exp
 import OccupancyInputCTCF.utils.utils_s as utils_s
 # ================ INPUT PARAMETERS =====================
 # Define genomic region and data files
-region = 'chr1:34850000-35000000'
+region = 'chr1:36000000-37500000'
 
 # Simulation parameters
 with open('data/paramdict.json', 'r') as json_file:
@@ -57,15 +57,15 @@ print("Step 3 complete. Output:", refined_occupancy)
 # Step 4: Generating Barrier List with Occupancy and Lifetimes
 print("Step 4: Generating Barrier List...")
 CTCF_left_positions, CTCF_right_positions, ctcf_loc_list, ctcf_lifetime_list, ctcf_offtime_list = convert.get_ctcf_list(
-    refined_occupancy, paramdict)
+    refined_occupancy, paramdict, insert_on='bound_time')
 print("Step 4 complete. Right barriers:", CTCF_right_positions, "Left barriers:", CTCF_left_positions)
 
 # Step 5: Running 1D Simulation
 import multiprocessing as mp
 from functools import partial
 print("Step 5: Running 1D Simulation...")
-output_path = 'simulations/sims/'
-trajectory_length = 1500
+output_path = 'simulations/sims_a/'
+trajectory_length = 31500
 n = 5 # number of simulations in multiprocessing
 file_name = params.paramdict_to_filename(paramdict)
 output_directory = output_path + 'folder_' + file_name.split('file_')[1]
@@ -112,6 +112,7 @@ lef_array = []
 n = 5
 wmap = []
 wchip = []
+wchip_ctcf = []
 for sim_id in range(1, n+1):
     file_name = f"simulation_{sim_id}"
     output_directory_partial = os.path.join(output_directory, f"{file_name}")
@@ -121,10 +122,15 @@ for sim_id in range(1, n+1):
         lefs = h5py.File(lef_file_path, 'r')['positions']
         print('length of lefs is %s'%len(np.array(lefs)))
         chip = utils_s.chip_seq_from_lef(lefs, mapN)
-        #lef_array.append(lefs)
         cmap = utils_s.contact_map_from_lefs(lefs[:], mapN)
         wmap.append(cmap)
         wchip.append(chip)
+        ctcf_array_right = np.array(h5py.File(lef_file_path, 'r')['CTCF_positions_right'])
+        ctcf_array_left = np.array(h5py.File(lef_file_path, 'r')['CTCF_positions_left'])
+        ctcf_array_right_sites = np.array(h5py.File(lef_file_path, 'r')['CTCF_sites_right'])
+        ctcf_array_left_sites = np.array(h5py.File(lef_file_path, 'r')['CTCF_sites_left'])
+        ctcfchip = utils_s.chip_seq_from_ctcf(ctcf_array_right, ctcf_array_right_sites, ctcf_array_left, ctcf_array_left_sites,mapN)
+        wchip_ctcf.append(np.array(ctcfchip))
     else:
         print(f"Error: LEFPositions.h5 file not found at {lef_file_path}")
 
@@ -132,12 +138,9 @@ for sim_id in range(1, n+1):
 # Process and visualize contact map
 whole_map = np.sum(wmap, axis=0)
 whole_chip = np.sum(wchip, axis=0)
-    
-whole_map = cmap
-#whole_map = np.sum(wmap, axis=0)
+whole_chip_ctcf = np.sum(wchip_ctcf, axis=0)    
 chip = utils_s.chip_seq_from_lef(lefs, mapN)
 
-#cmap = utils_s.contact_map_from_lefs(lef_array[:],mapN)
 cmap = whole_map
 matrix = adaptive_coarsegrain(cmap+1, cmap+1, cutoff = 3, max_levels=3, min_shape = 2)
 padded_matrix = np.pad(matrix, ((0, 1), (0, 1)), mode='constant')
@@ -147,8 +150,9 @@ print("Step 7 complete. Output at", output_path)
 
 # step 8: making maps 
 print("Step8: making experimental and simulated maps ...")
-output_file = 'newplots.pdf'
-mplot.plot_chip_hic(region, whole_chip, binned_matrix, output_file=output_file)
+output_file = 'newplots_%s_trial.pdf'%region
+#mplot.plot_chip_hic(region, whole_chip, binned_matrix, output_file=output_file)
+mplot.plot_chip_hic(region, whole_chip, whole_chip_ctcf, binned_matrix, res= 200000, output_file=output_file)
 print("Step 8 complete. Output at", output_file)
 
 # step 9: calculating FRiP
