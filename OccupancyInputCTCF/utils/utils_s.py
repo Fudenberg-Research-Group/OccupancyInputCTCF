@@ -28,16 +28,6 @@ def region_data_frame(dataframe, region, lattice_size=250):
     region_dataframe = region_dataframe.reset_index(drop=True)
     return region_dataframe
 
-def axes_ary(region, res = 10000):
-    region_ = bioframe.parse_region_string(region)
-    ### array to show in the map
-    mb = 1e6
-    start_reg = region_[1]
-    end_reg = region_[2]
-    ary = list(np.arange(0, (end_reg-start_reg)//res+1, 100))
-    ary_str = [region_[0]+':'+str(int(elements//mb))+' mb' for elements in np.arange(start_reg, end_reg+1,1e6)]
-    return ary, ary_str
-
 def make_region_occupancy(file):
     df = pandas.read_csv(file)
     result_c = df.groupby(['lattice_loc', 'strand'])['predicted_occupancy'].apply(lambda x: 1-((1 - x).prod())).reset_index()
@@ -88,4 +78,12 @@ def FRiP(num_sites_t, lef_positions, peak_positions ):
     hist,edges = np.histogram(  lef_positions  , np.arange(num_sites_t+1) )
     return np.sum(hist[peak_positions] )/len(lef_positions)
 
-
+def chip_seq_from_ctcf(ctcf_array_right, ctcf_array_right_sites, ctcf_array_left, ctcf_array_left_sites):
+    ctcfrightary = np.concatenate([arr.flatten()*ctcf_array_right_sites for arr in ctcf_array_right if arr.size > 0])
+    ctcfleftary = np.concatenate([arr.flatten()*ctcf_array_left_sites for arr in ctcf_array_left if arr.size >0])
+    ctcfs = np.concatenate([ctcfrightary[ctcfrightary>0], ctcfleftary[ctcfleftary>0]])
+    ctcfhist, hist_array = np.histogram(ctcfs, np.arange(0,mapN,1))
+    common_list = np.intersect1d(ctcf_array_right_sites, ctcf_array_left_sites)
+    for elements in common_list:
+        ctcfhist[elements] = ctcfhist[elements]/2
+    return ctcfhist
