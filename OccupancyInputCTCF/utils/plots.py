@@ -112,7 +112,7 @@ def plot_chip_hic(region, chip, chip_ctcf, binned_matrix, lattice_size = 0.25, r
 
     ax1 = axs[2, 2]
     ax1.plot(np.arange(len(chip_ctcf)), chip_ctcf / np.sum(chip_ctcf), color='red')
-    ax1.set_xlabel('extruders position')
+    ax1.set_xlabel('barrier position')
     ax1.set_title('Simulation, CTCF')
     ax1.set_xlim(0, len(chip_ctcf))
     xticksa, xticklabelsa = set_axes_ary(region, lattice_size=250, res = res)
