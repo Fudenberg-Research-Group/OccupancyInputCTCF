@@ -62,6 +62,7 @@ def calculate_contact_mat_save(lefs, str_frame, end_frame, every_frame, max_dist
 
 def create_contact_map_folders(n, output_directory):
     for contact_id in range(1, n + 1):
+        output_dirs= []
         file_name = f"contactmap_{contact_id}"
         output_directory_partial = os.path.join(output_directory, file_name)
         os.makedirs(output_directory_partial, exist_ok=True)
