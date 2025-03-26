@@ -67,6 +67,7 @@ def create_contact_map_folders(n, output_directory):
         output_directory_partial = os.path.join(output_directory, file_name)
         os.makedirs(output_directory_partial, exist_ok=True)
         output_dirs.append(output_directory_partial)
+        return output_dirs
 
 def region_data_frame(dataframe, region, lattice_size=250):
     """
