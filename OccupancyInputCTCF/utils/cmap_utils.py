@@ -30,7 +30,7 @@ def closest_distance(G, start, end):
         return float('inf') 
 
 
-def calculate_contact_mat_save(lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
+def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
     contact_map = []
     N = np.max(lefs) // res_convert + 1
     mod_i_values = mod_j_values = np.mod(np.arange(N // 10), N // 10)
