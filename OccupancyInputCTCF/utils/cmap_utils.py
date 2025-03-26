@@ -2,6 +2,31 @@ import bioframe
 
 import numpy as np
 
+import networkx as nx
+
+def create_lattice_graph(n, Lefs):
+    G = nx.Graph()
+    
+    # Add regular lattice edges
+    for i in range(n):
+        if i + 1 < n:  # Right neighbor
+            G.add_edge(i, i + 1, weight=1)
+        if i - 1 >= 0:  # Left neighbor
+            G.add_edge(i, i - 1, weight=1)
+    
+    # Add loop connections
+    for i, j in Lefs:
+        G.add_edge(i, j, weight=1)
+    
+    return G
+#G = create_lattice_graph(n, Lefs)
+def closest_distance(G, start, end):
+    try:
+        return nx.shortest_path_length(G, source=start, target=end, weight="weight")
+    except nx.NetworkXNoPath:
+        return float('inf') 
+
+
 def region_data_frame(dataframe, region, lattice_size=250):
     """
     Extracts and processes a specified genomic region from a dataframe.
