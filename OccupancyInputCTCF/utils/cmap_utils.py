@@ -1,6 +1,9 @@
 import bioframe
 
 import numpy as np
+import multiprocessing as mp
+import os
+from functools import partial
 
 import networkx as nx
 
@@ -26,6 +29,43 @@ def closest_distance(G, start, end):
     except nx.NetworkXNoPath:
         return float('inf') 
 
+
+def calculate_contact_mat_save(lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
+    contact_map = []
+    N = np.max(lefs) // res_convert + 1
+    mod_i_values = mod_j_values = np.mod(np.arange(N // 10), N // 10)
+    sites_p_r = N // 10
+    
+    for frame in range(str_frame, 19500, every_frame):
+        contact_matrix = np.zeros((sites_p_r, sites_p_r))
+        lefs_t = lefs[frame, :, :] // res_convert
+        G = create_lattice_graph(N, lefs_t)
+        
+        for i in range(sites_p_r):
+            for j in range(i + max_dist, sites_p_r):
+                contact_matrix[i, j] = contact_matrix[j, i] = replication_number * (1 / (j - i) ** 1.5)
+        
+        for dupl in range(replication_number):
+            start_idx = dupl * (N // 10)
+            end_idx = (dupl + 1) * (N // 10)
+            for i in range(start_idx, end_idx):
+                for j in range(i + 1, end_idx):
+                    if j < i + max_dist:
+                        dist = closest_distance(G, i, j)
+                        contact = 1 / (dist + 1) ** 1.5
+                        contact_matrix[mod_i_values[i - start_idx], mod_j_values[j - start_idx]] += contact
+                        contact_matrix[mod_j_values[j - start_idx], mod_i_values[i - start_idx]] += contact                  
+
+        contact_map.append(contact_matrix)
+
+    np.savez_compressed(os.path.join(output_dir, 'contact_map.npz'), contact_map=np.sum(contact_map,axis=0))
+
+def create_contact_map_folders(n, output_directory):
+    for contact_id in range(1, n + 1):
+        file_name = f"contactmap_{contact_id}"
+        output_directory_partial = os.path.join(output_directory, file_name)
+        os.makedirs(output_directory_partial, exist_ok=True)
+        output_dirs.append(output_directory_partial)
 
 def region_data_frame(dataframe, region, lattice_size=250):
     """
