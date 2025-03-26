@@ -36,7 +36,7 @@ def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist
     mod_i_values = mod_j_values = np.mod(np.arange(N // 10), N // 10)
     sites_p_r = N // 10
     
-    for frame in range(str_frame, 19500, every_frame):
+    for frame in range(str_frame, end_frame, every_frame):
         contact_matrix = np.zeros((sites_p_r, sites_p_r))
         lefs_t = lefs[frame, :, :] // res_convert
         G = create_lattice_graph(N, lefs_t)
