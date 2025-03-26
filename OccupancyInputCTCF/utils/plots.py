@@ -93,7 +93,7 @@ def plot_chip_hic(region, chip, chip_ctcf, binned_matrix, lattice_size = 0.25, r
 
     # Simulated Hi-C map
     ax = axs[0, 2]
-    im = ax.matshow(np.log10(binned_matrix + 0.01),  cmap='fall')
+    im = ax.matshow(np.log10(binned_matrix),  cmap='fall')
     ax.set_title('1D Simulation, %s'%region_[0])
     cax = axs[0, 3]
     plt.colorbar(im, cax=cax, label='raw counts')
