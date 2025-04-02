@@ -6,7 +6,7 @@ import os
 from functools import partial
 
 import networkx as nx
-
+import time 
 def create_lattice_graph(n, Lefs):
     G = nx.Graph()
     
@@ -39,8 +39,13 @@ def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist
     for frame in range(str_frame, end_frame, every_frame):
         contact_matrix = np.zeros((sites_p_r, sites_p_r))
         lefs_t = lefs[frame, :, :] // res_convert
+        start = time.time()
+
         G = create_lattice_graph(N, lefs_t)
-        
+        # Code to measure
+        end = time.time()
+        print(f"Elapsed time for graph: {end - start} seconds")
+        start = time.time()
         for i in range(sites_p_r):
             for j in range(i + max_dist, sites_p_r):
                 contact_matrix[i, j] = contact_matrix[j, i] = replication_number * (1 / (j - i) ** 1.5)
@@ -57,7 +62,8 @@ def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist
                         contact_matrix[mod_j_values[j - start_idx], mod_i_values[i - start_idx]] += contact                  
 
         contact_map.append(contact_matrix)
-
+        end = time.time()
+        print(f"Elapsed time for contact map calculation: {end - start} seconds")
     np.savez_compressed(os.path.join(output_dir, 'contact_map.npz'), contact_map=np.sum(contact_map,axis=0))
 
 def create_contact_map_folders(n, output_directory):
