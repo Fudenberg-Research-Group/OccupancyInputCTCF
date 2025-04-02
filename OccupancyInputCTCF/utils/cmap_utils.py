@@ -14,8 +14,8 @@ def create_lattice_graph(n, Lefs):
     for i in range(n):
         if i + 1 < n:  # Right neighbor
             G.add_edge(i, i + 1, weight=1)
-        if i - 1 >= 0:  # Left neighbor
-            G.add_edge(i, i - 1, weight=1)
+       # if i - 1 >= 0:  # Left neighbor
+       #     G.add_edge(i, i - 1, weight=1)
     
     # Add loop connections
     for i, j in Lefs:
