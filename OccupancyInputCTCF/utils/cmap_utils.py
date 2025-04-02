@@ -13,19 +13,19 @@ def create_lattice_graph(n, Lefs):
     # Add regular lattice edges
     for i in range(n):
         if i + 1 < n:  # Right neighbor
-            G.add_edge(i, i + 1, weight=1)
+            G.add_edge(i, i + 1)#, weight=1)
        # if i - 1 >= 0:  # Left neighbor
        #     G.add_edge(i, i - 1, weight=1)
     
     # Add loop connections
     for i, j in Lefs:
-        G.add_edge(i, j, weight=1)
+        G.add_edge(i, j)#, weight=1)
     
     return G
 #G = create_lattice_graph(n, Lefs)
 def closest_distance(G, start, end):
     try:
-        return nx.shortest_path_length(G, source=start, target=end, weight="weight")
+        return nx.shortest_path_length(G, source=start, target=end)#, weight="weight")
     except nx.NetworkXNoPath:
         return float('inf') 
 
@@ -33,8 +33,8 @@ def closest_distance(G, start, end):
 def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
     contact_map = []
     N = np.max(lefs) // res_convert + 1
-    mod_i_values = mod_j_values = np.mod(np.arange(N // 10), N // 10)
-    sites_p_r = N // 10
+    mod_i_values = mod_j_values = np.mod(np.arange(N // replication_number), N // replication_number)
+    sites_p_r = N // replication_number
     
     for frame in range(str_frame, end_frame, every_frame):
         contact_matrix = np.zeros((sites_p_r, sites_p_r))
@@ -51,8 +51,8 @@ def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist
                 contact_matrix[i, j] = contact_matrix[j, i] = replication_number * (1 / (j - i) ** 1.5)
         
         for dupl in range(replication_number):
-            start_idx = dupl * (N // 10)
-            end_idx = (dupl + 1) * (N // 10)
+            start_idx = dupl * (N // replication_number)
+            end_idx = (dupl + 1) * (N // replication_number)
             for i in range(start_idx, end_idx):
                 for j in range(i + 1, end_idx):
                     if j < i + max_dist:
