@@ -67,8 +67,8 @@ def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist
     np.savez_compressed(os.path.join(output_dir, 'contact_map.npz'), contact_map=np.sum(contact_map,axis=0))
 
 def create_contact_map_folders(n, output_directory):
+    output_dirs= []
     for contact_id in range(1, n + 1):
-        output_dirs= []
         file_name = f"contactmap_{contact_id}"
         output_directory_partial = os.path.join(output_directory, file_name)
         os.makedirs(output_directory_partial, exist_ok=True)
