@@ -33,7 +33,7 @@ def perform_md_simulation(lef_file_path, paramdict):
     steps= paramdict['steps'] # number of md steps between 1d updates
       
     # new parameters because some things changed 
-    saveEveryBlocks = 10   # save every 10 blocks (saving every block is now too much almost)
+    saveEveryBlocks = 5   # save every 10 blocks (saving every block is now too much almost)
     restartSimulationEveryBlocks = 100
     
     # parameters for smc bonds
