@@ -12,7 +12,7 @@ from polychrom.lib.extrusion import  bondUpdater
 import polychrom.contactmaps
 
 
-def perform_md_simulation(lef_file_path, paramdict):
+def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
 
     # Having 1d paramters
     sites_per_monomer = paramdict['sites_per_monomer']
