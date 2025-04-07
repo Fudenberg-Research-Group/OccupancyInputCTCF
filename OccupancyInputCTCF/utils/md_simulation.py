@@ -23,8 +23,8 @@ def perform_md_simulation(lef_file_path, paramdict):
     Nframes = LEFpositions.shape[0]
     
     # Md simulation characteristics
-    stiff = 1
-    dens = 0.2
+    stiff = paramdict['stiff']
+    dens = paramdict['dens']
     box = (number_of_monomers / dens) ** 0.33 
     smcStepsPerBlock = 1  # now doing 1 SMC step per block 
     
@@ -33,8 +33,8 @@ def perform_md_simulation(lef_file_path, paramdict):
     steps= paramdict['steps'] # number of md steps between 1d updates
       
     # new parameters because some things changed 
-    saveEveryBlocks = 5   # save every 10 blocks (saving every block is now too much almost)
-    restartSimulationEveryBlocks = 100
+    saveEveryBlocks = paramdict['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
+    restartSimulationEveryBlocks = paramdict['restartSimulationEveryBlocks']
     
     # parameters for smc bonds
     smcBondWiggleDist = 0.2
@@ -80,7 +80,7 @@ def perform_md_simulation(lef_file_path, paramdict):
     
                 angle_force_func=forces.angle_force,
                 angle_force_kwargs={
-                    'k':1.5
+                    'k':stiff
                 },
     
                 nonbonded_force_func=forces.polynomial_repulsive,
