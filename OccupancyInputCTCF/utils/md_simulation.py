@@ -1,5 +1,5 @@
 import h5py 
-
+import time
 # for MD simulations
 import polychrom
 from polychrom import polymerutils
@@ -34,7 +34,7 @@ def perform_md_simulation(lef_file_path, paramdict):
       
     # new parameters because some things changed 
     saveEveryBlocks = 10   # save every 10 blocks (saving every block is now too much almost)
-    restartSimulationEveryBlocks = 10 ##########################################################################check
+    restartSimulationEveryBlocks = 100
     
     # parameters for smc bonds
     smcBondWiggleDist = 0.2
