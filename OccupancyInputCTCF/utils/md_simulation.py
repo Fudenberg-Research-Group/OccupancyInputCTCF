@@ -27,22 +27,19 @@ def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
     dens = paramdict_md['dens']
     box = (number_of_monomers / dens) ** 0.33 
     smcStepsPerBlock = 1  # now doing 1 SMC step per block 
+    saveEveryBlocks = paramdict_md['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
+    restartSimulationEveryBlocks = paramdict_md['restartSimulationEveryBlocks']
+    # assertions for easy managing code below 
+    assert (Nframes % restartSimulationEveryBlocks) == 0 
+    assert (restartSimulationEveryBlocks % saveEveryBlocks) == 0
     
     # initialize positions
     data = grow_cubic(number_of_monomers, int(box) - 2)  # creates a compact conformation 
     steps= paramdict_md['steps'] # number of md steps between 1d updates
       
-    # new parameters because some things changed 
-    saveEveryBlocks = paramdict_md['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
-    restartSimulationEveryBlocks = paramdict_md['restartSimulationEveryBlocks']
-    
     # parameters for smc bonds
     smcBondWiggleDist = 0.2
     smcBondDist = 0.5
-    
-    # assertions for easy managing code below 
-    assert (Nframes % restartSimulationEveryBlocks) == 0 
-    assert (restartSimulationEveryBlocks % saveEveryBlocks) == 0
     
     savesPerSim = restartSimulationEveryBlocks // saveEveryBlocks
     simInitsTotal  = (Nframes) // restartSimulationEveryBlocks 
