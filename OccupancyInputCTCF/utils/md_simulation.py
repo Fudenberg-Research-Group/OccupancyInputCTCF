@@ -14,7 +14,7 @@ import polychrom.contactmaps
 
 def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
 
-    # Having 1d paramters
+    # Loading 1d paramters
     sites_per_monomer = paramdict['sites_per_monomer']
     lef_file = h5py.File(lef_file_path + "/LEFPositions.h5", mode='r')
     LEFpositions = lef_file["positions"][::sites_per_monomer]// sites_per_monomer
@@ -34,7 +34,7 @@ def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
       
     # new parameters because some things changed 
     saveEveryBlocks = paramdict_md['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
-    restartSimulationEveryBlocks = paramdict['restartSimulationEveryBlocks']
+    restartSimulationEveryBlocks = paramdict_md['restartSimulationEveryBlocks']
     
     # parameters for smc bonds
     smcBondWiggleDist = 0.2
