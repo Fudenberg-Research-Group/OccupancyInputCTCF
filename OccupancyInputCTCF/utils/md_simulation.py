@@ -23,17 +23,17 @@ def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
     Nframes = LEFpositions.shape[0]
     
     # Md simulation characteristics
-    stiff = paramdict['stiff']
-    dens = paramdict['dens']
+    stiff = paramdict_md['stiff']
+    dens = paramdict_md['dens']
     box = (number_of_monomers / dens) ** 0.33 
     smcStepsPerBlock = 1  # now doing 1 SMC step per block 
     
     # initialize positions
     data = grow_cubic(number_of_monomers, int(box) - 2)  # creates a compact conformation 
-    steps= paramdict['steps'] # number of md steps between 1d updates
+    steps= paramdict_md['steps'] # number of md steps between 1d updates
       
     # new parameters because some things changed 
-    saveEveryBlocks = paramdict['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
+    saveEveryBlocks = paramdict_md['saveEveryBlocks']   # save every 10 blocks (saving every block is now too much almost)
     restartSimulationEveryBlocks = paramdict['restartSimulationEveryBlocks']
     
     # parameters for smc bonds
