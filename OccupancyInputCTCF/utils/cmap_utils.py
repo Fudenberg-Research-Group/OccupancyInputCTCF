@@ -164,16 +164,6 @@ def chip_seq_from_ctcf(lef_file_path, site_number_per_replica):
     for elements in common_list:
         ctcfhist[elements] = ctcfhist[elements]/2
     return ctcfhist
-#def chip_seq_from_ctcf(ctcf_array_right, ctcf_array_right_sites, ctcf_array_left, ctcf_array_left_sites, site_number_per_replica):
-#    ctcfrightary = np.concatenate([arr.flatten()*ctcf_array_right_sites for arr in ctcf_array_right if arr.size > 0])
-#    ctcfleftary = np.concatenate([arr.flatten()*ctcf_array_left_sites for arr in ctcf_array_left if arr.size >0])
-#    ctcfs = np.concatenate([ctcfrightary[ctcfrightary>0], ctcfleftary[ctcfleftary>0]])
-#    ctcfhist, hist_array = np.histogram(ctcfs, np.arange(0,site_number_per_replica,1))
-#    common_list = np.intersect1d(ctcf_array_right_sites, ctcf_array_left_sites)
-#    for elements in common_list:
-#        ctcfhist[elements] = ctcfhist[elements]/2
-#    return ctcfhist
-
 
 
 
