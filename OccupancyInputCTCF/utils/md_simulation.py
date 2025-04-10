@@ -12,6 +12,7 @@ from polychrom.hdf5_format import HDF5Reporter, list_URIs, load_URI, load_hdf5_f
 from polychrom.lib.extrusion import  bondUpdater
 import polychrom.contactmaps
 from polykit.analysis import contact_maps as cms
+import cooler
 
 
 def perform_md_simulation(lef_file_path, paramdict, paramdict_md):
