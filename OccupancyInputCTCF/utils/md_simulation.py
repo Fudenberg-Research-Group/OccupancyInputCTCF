@@ -1,5 +1,6 @@
 import h5py 
 import time
+import numpy as np
 # for MD simulations
 import polychrom
 from polychrom import polymerutils
