@@ -4,7 +4,7 @@ import numpy as np
 import multiprocessing as mp
 import os
 from functools import partial
-
+import h5py
 import networkx as nx
 import time 
 def create_lattice_graph(n, Lefs):
