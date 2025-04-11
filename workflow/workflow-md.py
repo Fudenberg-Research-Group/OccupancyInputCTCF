@@ -101,6 +101,7 @@ print("Step 7: Processing Outputs...")
 MAP_OUTPUT_DIRECTORY = output_directory + '/contact_maps'
 os.makedirs(MAP_OUTPUT_DIRECTORY, exist_ok=True)
 mapN = PARAMDICT['monomers_per_replica']*PARAMDICT['sites_per_monomer']
+total_sites = mapN * PARAMDICT['number_of_replica']
 lef_array, wmap, wchip, wchip_ctcf = [], [], [], []
 
 for sim_id in range(1, N_SIMULATIONS+1):
@@ -128,7 +129,7 @@ print(map_output_dirs)
 
 end_frame = len(lefs_array)-END_FRAME_OFFSET
 def worker(map_output_dir, START_FRAMES):
-    utils_s.calculate_contact_map_save(lefs_array, START_FRAMES, end_frame, EVERY_FRAME, MAX_DIST, RES_CONVERT, REPLICATION_NUMBER, map_output_dir)
+    utils_s.calculate_contact_maps(total_sites, lefs_array, START_FRAMES, end_frame, EVERY_FRAME, MAX_DIST, RES_CONVERT, REPLICATION_NUMBER, map_output_dir)
 
 with mp.Pool(processes=mp.cpu_count()) as pool:
     pool.starmap(worker, zip(map_output_dirs, START_FRAMES))
