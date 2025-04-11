@@ -30,6 +30,32 @@ def closest_distance(G, start, end):
         return float('inf') 
 
 
+def calculate_contact_maps(total_sites, lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
+    N = total_sites // res_convert 
+    mod_i_values = mod_j_values = np.mod(np.arange(N // replication_number), N // replication_number)
+    sites_p_r = N // replication_number
+    contact_matrix = np.zeros((sites_p_r, sites_p_r))
+    for frame in range(str_frame, end_frame, every_frame):
+        slice_1 = lefs[frame, :, :] // res_convert
+             
+        for dupl in range(replication_number):
+            start_idx = dupl * (N // replication_number)
+            end_idx = (dupl + 1) * (N // replication_number) 
+            mask = (slice_1 > start_idx) & (slice_1 < end_idx)
+            pair_mask = np.all(mask, axis=1)
+            filtered_pairs = slice_1[pair_mask]
+            final_pairs = np.mod(filtered_pairs, N//replication_number)
+            G = create_lattice_graph(N//replication_number, final_pairs)
+            for i in range(N//replication_number):
+                for j in range(i + 1, N//replication_number):
+                    if j < i + max_dist:
+                        dist = closest_distance(G, i, j)
+                        contact = 1 / (dist) ** 1.5
+                        contact_matrix[i, j] += contact
+                        contact_matrix[j, i] += contact                   
+
+    np.savez_compressed(os.path.join(output_dir, 'contact_map.npz'), contact_map=contact_matrix)
+
 def calculate_contact_map_save(lefs, str_frame, end_frame, every_frame, max_dist, res_convert, replication_number, output_dir):
     contact_map = []
     N = np.max(lefs) // res_convert + 1
