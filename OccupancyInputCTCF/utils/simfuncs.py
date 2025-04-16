@@ -91,8 +91,8 @@ def make_CTCF_dynamic_arrays_site_specific(site_types,
         CTCF_lifetime_array[CTCF_loc_list[i]] = CTCF_lifetime_list[i]
         CTCF_offtime_array[CTCF_loc_list[i]] = CTCF_offtime_list[i]
     
-    CTCF_death_array = 1. / CTCF_lifetime_array / sites_per_monomer
-    CTCF_birth_array = 1. / CTCF_offtime_array / sites_per_monomer
+    CTCF_death_array = 1. / CTCF_lifetime_array / (velocity_multiplier * sites_per_monomer)
+    CTCF_birth_array = 1. / CTCF_offtime_array / (velocity_multiplier * sites_per_monomer)
 
     return [np.tile(CTCF_death_array, number_of_replica), 
             np.tile(CTCF_birth_array, number_of_replica)]
@@ -125,8 +125,8 @@ def make_LEF_arrays(site_types,
     birth_array = make_site_array(site_types, LEF_birth, **kwargs)
     pause_array = make_site_array(site_types, LEF_pause, **kwargs)
     
-    death_array = 1. / lifetime_array / sites_per_monomer
-    stalled_death_array = 1. / stalled_lifetime_array / sites_per_monomer
+    death_array = 1. / lifetime_array / (velocity_multiplier * sites_per_monomer)
+    stalled_death_array = 1. / stalled_lifetime_array / (velocity_multiplier * sites_per_monomer)
 
     return [death_array, stalled_death_array, birth_array, pause_array]
 
