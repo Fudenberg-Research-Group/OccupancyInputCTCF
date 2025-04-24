@@ -32,7 +32,7 @@ def set_axes_ary(region, lattice_size=250, res = 100000):
     ary_str = [str((elements/mb)) for elements in np.arange(start_reg, end_reg+1,res)]
     return ary, ary_str
 
-def plot_chip_hic(region, chip, chip_ctcf, binned_matrix, lattice_size = 0.25, res= 100000, output_file='plots.png'):
+def plot_chip_hic(region, chip, chip_ctcf, clr=clr, binned_matrix, lattice_size = 0.25, res= 100000, output_file='plots.png'):
     """
     Hi-C and ChIP-seq plots along with simulated data visualizations.
     
