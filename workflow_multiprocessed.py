@@ -25,6 +25,15 @@ region = 'chr1:36000000-37500000'
 # Simulation parameters
 with open('data/paramdict.json', 'r') as json_file:
     paramdict = json.load(json_file)
+
+pause_multip = round(1 / (1 - paramdict['LEF_pause'][0]), 1)
+
+for key in ['CTCF_lifetime', 'CTCF_offtime', 'LEF_lifetime', 'LEF_stalled_lifetime']:
+    val = paramdict[key]
+    paramdict[key] = [x * pause_multip for x in val]
+
+print(paramdict)
+
 #paramdict['CTCF_backstall']=[0.3]
 # Flags for simulation
 run_md_sim = True  # Flag for MD simulation
