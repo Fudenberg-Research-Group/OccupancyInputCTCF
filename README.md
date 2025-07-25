@@ -5,7 +5,7 @@
 ### Description
 This GitHub repository contains tools for simulating chromatin loop extrusion with locus-specific occupancy rates for dynamic CTCF barriers.
 
-
+![Workflow Figure](figures/workflowfigure.png)
 
 ### Structure of the repository
 The structure of this repository follows as below:
