@@ -5,7 +5,7 @@
 ### Description
 This GitHub repository provides tools for training machine learning models to predict 3D chromatin architecture from single-molecule footprinting data (e.g., methylation patterns). It integrates sequence features and occupancy profiles to infer genome folding and validates predictions by comparing Hi-C data with simulated chromatin loop extrusion, incorporating locus-specific occupancy rates and dynamic CTCF barriers.
 
-![Workflow Figure](figures/workflowfigure.png)
+![Workflow Figure](figures/workflowfigurenews.png)
 
 ### Structure of the repository
 The structure of this repository follows as below:
