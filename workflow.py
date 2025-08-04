@@ -20,7 +20,7 @@ import OccupancyInputCTCF.utils.experimental_path as exp
 import OccupancyInputCTCF.utils.utils_s as utils_s
 # ================ INPUT PARAMETERS =====================
 # Define genomic region and data files
-region = 'chr1:34850000-35000000'
+region = 'chr1:34000000-35000000'
 
 # Simulation parameters
 with open('data/paramdict.json', 'r') as json_file:
