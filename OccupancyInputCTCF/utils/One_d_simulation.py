@@ -52,7 +52,7 @@ def Perform_1d_simulation(paramdict, ctcf_params, trajectory_length, output_dire
     CTCF_left_positions, CTCF_right_positions, ctcf_loc_list, ctcf_lifetime_list, ctcf_offtime_list = ctcf_params
 
     ########### Lattice simulation setup ###########
-    num_dummy_steps = int(0.1 * trajectory_length)  # Equilibration steps for LEFs
+    num_dummy_steps = int(0.2 * trajectory_length)  # Equilibration steps for LEFs
     blocksteps = 5  # Number of steps per block for data writing
     bins = np.linspace(0, trajectory_length, blocksteps, dtype=int)  # Define simulation bins
     N = paramdict['monomers_per_replica'] * paramdict['number_of_replica']
