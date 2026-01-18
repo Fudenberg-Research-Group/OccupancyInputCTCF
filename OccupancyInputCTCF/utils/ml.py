@@ -76,7 +76,7 @@ def scan_sequence(pwm, pwm_rc, seq):
     else:
         return "-", rc_motif_position
 
-def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project/fudenber_735/genomes/mm10/mm10.fa',
+def fetch_and_orient_from_fasta(bedfile, ref_genome_filepath='/project2/fudenber_735/genomes/mm10/mm10.fa',
                           flanking_bp=15, core_bp=18):
     peaks_table = pd.read_table(bedfile, sep=',').iloc[:,:3]
     ref_genome = pysam.FastaFile(ref_genome_filepath)
